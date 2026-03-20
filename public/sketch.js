@@ -11,8 +11,11 @@ async function setup() {
   img = await loadImage('camotal_delined.jpg');
 
   // Create canvas with WEBGL mode
-  createCanvas(800, 600, WEBGL);
+  createCanvas(img.width, img.height, WEBGL);
 
+  // Use CORNER mode.
+  imageMode(CENTER);
+  
   // Load pixels to analyze the image
   img.loadPixels();
   
@@ -78,11 +81,11 @@ function draw() {
   pointLight(255, 255, 255, 0, 0, 200);
 
   // Center the cubes
-  translate(0, 0, -200);
+  translate(width/2 - img.width/2.5, height/2 - img.height/1.9, -150);
 
   // Rotate slowly for better visibility
-  rotateY(frameCount * 0.005);
-  rotateX(sin(frameCount * 0.002) * 0.2);
+  rotateY(PI/50)//animated rotation: rotateY(frameCount * 0.01);
+  rotateX(PI/5)//animated rotation: rotateX(frameCount * 0.005);
 
   // Draw all cubes
   for (let cube of cubes) {
