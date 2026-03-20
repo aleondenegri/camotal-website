@@ -4,8 +4,8 @@ let cubeSize = 45; // Size of each cube
 let threshold = 30; // Threshold for detecting black pixels
 
 async function setup() {
-  // Red background while asset loads
-  background(255, 0, 0);
+  // Red background while asset loads (little square at the top left corner)
+  //background(255, 0, 0);
 
   // Wait for the image to load
   img = await loadImage('camotal_delined.jpg');
