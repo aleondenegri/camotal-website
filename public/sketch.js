@@ -1,29 +1,35 @@
-// SUPER MINIMAL TEST
-console.log("🚀 Minimal sketch.js loaded");
+let img;
+let cubes = [];
+let cubeSize = 45; // Size of each cube
+let threshold = 30; // Threshold for detecting black pixels
 
-function setup() {
-    console.log("📝 Setup started");
-    
-    // Try to create canvas with different methods
-    try {
-        let canvas = createCanvas(400, 400);
-        console.log("✅ Canvas created:", canvas);
-        
-        background(255, 0, 0); // Bright red
-        console.log("✅ Background set to red");
-        
-        // Draw a white circle
-        fill(255);
-        noStroke();
-        circle(200, 200, 100);
-        console.log("✅ Circle drawn");
-        
-    } catch (e) {
-        console.error("❌ Error in setup:", e);
-    }
-}
+async function setup() {
+
+  // Red background while asset loads
+  background(255, 0, 0);
+
+  // Wait for the image to load
+  img = await loadImage('camotal_delined.jpg');
+
+  // box() is supported in WEBGL mode
+  createCanvas(img.width, img.height, WEBGL);
+
+  // Use CORNER mode.
+  imageMode(CENTER);
+
+  // Draw the image.
+  image(img, 0, 0);
+
+  // Add text confirmation
+  fill(0);
+  textSize(24);
+  text("✅ Image loaded successfully!", 20, 40);
+  
+  console.log("✅ Setup complete - check the canvas!");
+
+  }
 
 function draw() {
-    // Optional: update something
-    // console.log("draw frame:", frameCount);
+  // No loop needed for this test
+  noLoop();
 }
