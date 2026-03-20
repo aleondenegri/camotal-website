@@ -1,25 +1,22 @@
 let img;
 let cubes = [];
-let cubeSize = 45; // Size of each cube
-let threshold = 30; // Threshold for detecting black pixels
+let cubeSize = 45;
+let threshold = 30;
+let rotationSpeed = 0.005;
 
 async function setup() {
-
   // Red background while asset loads
   background(255, 0, 0);
-
+  
+  console.log("🔄 Loading image...");
+  
   // Wait for the image to load
   img = await loadImage('camotal_delined.jpg');
-
+  
   console.log("✅ Image loaded:", img.width, "x", img.height);
   
-  // Create canvas
-  createCanvas(img.width, img.height);
-  
-  // Display original image faintly in background
-  tint(255, 100);
-  image(img, 0, 0);
-  noTint();
+  // Create canvas with WEBGL for 3D
+  createCanvas(800, 600, WEBGL);
   
   // Load pixels for analysis
   img.loadPixels();
@@ -27,19 +24,15 @@ async function setup() {
   // Process the image to find black areas
   await processImage();
   
-  // Draw the grid overlay
-  drawGrid();
+  console.log(`✅ Generated ${cubes.length} cubes (${cubes.filter(c => c.type === 'inside').length} inside, ${cubes.filter(c => c.type === 'outside').length} outside)`);
   
-  console.log(`✅ Processed ${cubes.length} cubes`);
+  // Set up lighting
+  setupLighting();
 }
 
 async function processImage() {
-  console.log("🔄 Processing image pixels...");
-  
   let cols = floor(img.width / cubeSize);
   let rows = floor(img.height / cubeSize);
-  
-  console.log(`Grid size: ${cols} x ${rows} cells`);
   
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
@@ -50,46 +43,64 @@ async function processImage() {
       let isInside = isBlackFigure(x, y);
       
       cubes.push({
-        x: x,
-        y: y,
+        x: x - img.width/2,
+        y: y - img.height/2,
         size: cubeSize * 0.9,
-        type: isInside ? 'inside' : 'outside'
+        type: isInside ? 'inside' : 'outside',
+        rotX: random(TWO_PI),
+        rotY: random(TWO_PI),
+        rotSpeed: random(0.005, 0.02)
       });
     }
   }
 }
 
-function drawGrid() {
-  // Draw all cells
+function draw() {
+  background(255);
+  
+  // Center the figure
+  translate(0, 0, -200);
+  
+  // Auto rotation
+  rotateY(frameCount * rotationSpeed);
+  rotateX(sin(frameCount * 0.002) * 0.2);
+  
+// Draw all cubes
   for (let cube of cubes) {
     push();
-    translate(cube.x, cube.y);
-    rectMode(CENTER);
+    translate(cube.x, cube.y, 0);
     
+    // Update individual cube rotation
+    cube.rotX += cube.rotSpeed;
+    cube.rotY += cube.rotSpeed * 0.3;
+    rotateX(cube.rotX);
+    rotateY(cube.rotY);
+    
+    // Set color based on position
     if (cube.type === 'inside') {
-      fill(255, 165, 0, 150); // Orange semi-transparent
+      // Orange for inside the figure
+      fill(255, 165, 0);
       stroke(255, 140, 0);
     } else {
-      fill(0, 100, 255, 100); // Blue semi-transparent
+      // Blue for outside
+      fill(0, 100, 255);
       stroke(0, 70, 200);
     }
     
     strokeWeight(1);
-    rect(0, 0, cube.size, cube.size);
+    box(cube.size);
     pop();
   }
-
-  // Add statistics
-  let insideCount = cubes.filter(c => c.type === 'inside').length;
-  let outsideCount = cubes.filter(c => c.type === 'outside').length;
   
+  // Add instructions
   push();
+  resetMatrix();
   fill(0);
   noStroke();
-  textSize(16);
-  text(`Orange (inside): ${insideCount}`, 20, 30);
-  text(`Blue (outside): ${outsideCount}`, 20, 50);
-  text(`Total cells: ${cubes.length}`, 20, 70);
+  textSize(14);
+  textAlign(LEFT);
+  text(`FPS: ${floor(frameRate())} | Cubes: ${cubes.length}`, -width/2 + 20, -height/2 + 30);
+  text("Press SPACE to toggle rotation | Click and drag to rotate view", -width/2 + 20, -height/2 + 50);
   pop();
 }
 
@@ -105,6 +116,3 @@ function isBlackFigure(x, y) {
   return (r + g + b) < threshold;
 }
 
-function draw() {
-  noLoop();
-}
