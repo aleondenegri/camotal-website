@@ -9,7 +9,7 @@ async function setup() {
   background(255, 0, 0);
 
   // Wait for the image to load
-  img = await loadImage('assets/camotal_delined.jpg');
+  img = await loadImage('public/camotal_delined.jpg');
 
   // box() is supported in WEBGL mode
   createCanvas(img.width, img.height, WEBGL);
