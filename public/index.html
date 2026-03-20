@@ -8,13 +8,27 @@
     <!-- IMPORTANT: Using p5.js version v2.2.1, but cloudfare only has 2.0.5 -->
     <!--script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/2.0.5/p5.js"></script> to be used the js script embedded in the project-->
 
+    <!-- Load p5.js from local js folder -->
+    <script src="js/p5.js"></script>
+
     <!-- Optional CSS -->
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
+        body { margin: 0; padding: 0; background: #f0f0f0; }
+        #status { 
+            position: fixed; 
+            top: 20px; 
+            left: 20px; 
+            background: white; 
+            padding: 20px; 
+            border: 3px solid black;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 16px;
+            z-index: 9999;
+            box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
         }
+        .success { border-color: green; background: #e8ffe8; }
+        .error { border-color: red; background: #ffe8e8; }
     </style>
 </head>
 <body>

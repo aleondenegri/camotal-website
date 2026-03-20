@@ -1,19 +1,29 @@
-console.log("MINIMAL TEST - START");
+// SUPER MINIMAL TEST
+console.log("🚀 Minimal sketch.js loaded");
 
 function setup() {
-    console.log("SETUP - creating canvas");
-    createCanvas(400, 400);
-    background(255, 0, 0); // Bright red
+    console.log("📝 Setup started");
+    
+    // Try to create canvas with different methods
+    try {
+        let canvas = createCanvas(400, 400);
+        console.log("✅ Canvas created:", canvas);
+        
+        background(255, 0, 0); // Bright red
+        console.log("✅ Background set to red");
+        
+        // Draw a white circle
+        fill(255);
+        noStroke();
+        circle(200, 200, 100);
+        console.log("✅ Circle drawn");
+        
+    } catch (e) {
+        console.error("❌ Error in setup:", e);
+    }
 }
 
 function draw() {
-    console.log("DRAW - frame", frameCount);
-    
-    // Fill with changing color
-    background(frameCount % 255, 100, 150);
-    
-    // Draw circle at mouse
-    fill(255);
-    noStroke();
-    circle(mouseX, mouseY, 50);
+    // Optional: update something
+    // console.log("draw frame:", frameCount);
 }
