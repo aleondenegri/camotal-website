@@ -13,28 +13,75 @@
 
     <!-- Optional CSS -->
     <style>
-        body { margin: 0; padding: 0; background: #f0f0f0; }
-        #status { 
-            position: fixed; 
-            top: 20px; 
-            left: 20px; 
-            background: white; 
-            padding: 20px; 
-            border: 3px solid black;
-            border-radius: 10px;
-            font-family: monospace;
-            font-size: 16px;
-            z-index: 9999;
-            box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
         }
-        .success { border-color: green; background: #e8ffe8; }
-        .error { border-color: red; background: #ffe8e8; }
+        canvas {
+            display: block;
+        }
     </style>
 </head>
 <body>
-    <!--<h1>Hola Emilio !</h1>-->
+    <div id="status">
+        <h3>🔍 P5.js Load Test</h3>
+        <div id="messages">Checking...</div>
+    </div>
 
-    <!-- CHECK PATH OF sketch.js, INTRODUCE IT HERE -->
+    <script>
+        const statusDiv = document.getElementById('messages');
+        
+        function addMessage(msg, isError = false) {
+            statusDiv.innerHTML += `<div style="color: ${isError ? 'red' : 'black'};">${msg}</div>`;
+        }
+        
+        // Check 1: Is the script tag working?
+        addMessage('✅ HTML script is running');
+        
+        // Check 2: Can we find p5.js?
+        if (typeof p5 !== 'undefined') {
+            addMessage(`✅ p5.js FOUND! Version: ${p5.VERSION || 'unknown'}`);
+            document.getElementById('status').className = 'success';
+        } else {
+            addMessage('❌ p5.js NOT FOUND!', true);
+            document.getElementById('status').className = 'error';
+            
+            // Try to check if the file exists
+            fetch('js/p5.min.js')
+                .then(response => {
+                    if (response.ok) {
+                        addMessage('✅ js/p5.min.js exists but may have loading error', true);
+                    } else {
+                        addMessage(`❌ js/p5.min.js NOT FOUND (Status: ${response.status})`, true);
+                    }
+                })
+                .catch(err => {
+                    addMessage(`❌ Error checking p5.js file: ${err.message}`, true);
+                });
+        }
+        
+        // Check 3: Can we create a simple canvas manually?
+        setTimeout(() => {
+            if (typeof p5 !== 'undefined') {
+                addMessage('✅ p5.js loaded - attempting to create sketch...');
+                
+                // Try to create a simple sketch programmatically
+                new p5((p) => {
+                    p.setup = function() {
+                        p.createCanvas(400, 400);
+                        p.background(255, 0, 0);
+                        addMessage('✅ Manual sketch created with red background!');
+                    };
+                    p.draw = function() {
+                        p.fill(0, 0, 255);
+                        p.circle(p.mouseX, p.mouseY, 50);
+                    };
+                }, 'body');
+            }
+        }, 500);
+    </script>
+    
     <script src="sketch.js"></script>
 </body>
 </html>

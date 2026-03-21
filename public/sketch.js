@@ -2,6 +2,7 @@ let img;
 let cubes = [];
 let cubeSize = 45; // Size of each cube
 let threshold = 30; // Threshold for detecting black pixels
+let zoomLevel = 1;
 
 async function setup() {
   // Red background while asset loads (little square at the top left corner)
@@ -11,7 +12,8 @@ async function setup() {
   img = await loadImage('camotal_delined.jpg');
 
   // Create canvas with WEBGL mode
-  createCanvas(img.width, img.height, WEBGL);
+  //createCanvas(img.width, img.height, WEBGL);
+  createCanvas(windowWidth, windowHeight, WEBGL); // this line makes that the canvas adapts to the windows size
 
   // Use CORNER mode.
   imageMode(CENTER);
@@ -80,10 +82,23 @@ function draw() {
   directionalLight(255, 255, 255, 0, 0, -1);
   pointLight(255, 255, 255, 0, 0, 200);
 
-  // Center the cubes
-  translate(width/2 - img.width/2.5, height/2 - img.height/1.9, -150);
+  // Calculate scale based on window size
+  let figureWidth = img.width;
+  let figureHeight = img.height;
+  
+  // Calculate zoom to fit in window
+  let zoomX = width / figureWidth;
+  let zoomY = height / figureHeight;
+  zoomLevel = min(zoomX, zoomY) * 0.8; // 80% of available space
 
-  // Rotate slowly for better visibility
+  // Apply zoom transformation
+  scale(zoomLevel);
+  
+  // Center the cubes
+  //translate(width/2 - img.width/2.5, height/2 - img.height/1.9, -150);
+  translate(0, 0, -300);
+
+  // Rotate slowly for better visibility of the whole plane
   rotateY(PI/50)//animated rotation: rotateY(frameCount * 0.01);
   rotateX(PI/5)//animated rotation: rotateX(frameCount * 0.005);
 
@@ -95,8 +110,8 @@ function draw() {
     // Update rotation
     cube.rotX += cube.rotSpeed;
     cube.rotY += cube.rotSpeed * 0.3;
-    rotateX(cube.rotX);
-    rotateY(cube.rotY);
+    //rotateX(cube.rotX); // for rotating the cubes in it's same axis
+    //rotateY(cube.rotY);
     
     // Set color based on position
     if (cube.type === 'inside') {
@@ -118,8 +133,13 @@ function draw() {
   push();
   resetMatrix();
   fill(0);
+  camera();
   noStroke();
   textSize(12);
   text(`FPS: ${floor(frameRate())} | Cubes: ${cubes.length}`, -width/2 + 20, -height/2 + 30);
   pop();
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
 }
