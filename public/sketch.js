@@ -110,8 +110,8 @@ function draw() {
     // Update rotation
     cube.rotX += cube.rotSpeed;
     cube.rotY += cube.rotSpeed * 0.3;
-    //rotateX(cube.rotX); // for rotating the cubes in it's same axis
-    //rotateY(cube.rotY);
+    rotateX(cube.rotX); // for rotating the cubes in it's same axis
+    rotateY(cube.rotY);
     
     // Set color based on position
     if (cube.type === 'inside') {
@@ -136,7 +136,7 @@ function draw() {
   camera();
   noStroke();
   textSize(12);
-  text(`FPS: ${floor(frameRate())} | Cubes: ${cubes.length}`, -width/2 + 20, -height/2 + 30);
+  //text(`FPS: ${floor(frameRate())} | Cubes: ${cubes.length}`, -width/2 + 20, -height/2 + 30);
   pop();
 }
 
