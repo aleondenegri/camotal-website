@@ -3,64 +3,246 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page A</title>
+    <title>Page A - Gallery</title>
     <style>
-        body {
+        * {
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Helvetica', 'Helvetica Neue', 'Arial', sans-serif;
+            background: #fef9e6;  /* Even whiter bone-white / off-white */
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            padding: 40px 20px;
         }
         
+        /* Main container - flat, no shadow */
         .container {
-            text-align: center;
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            max-width: 600px;
-            margin: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #fef9e6;  /* Same whiter bone-white background */
         }
         
-        h1 {
-            color: #667eea;
+        /* Header Section - flat */
+        .header {
+            background: #fef9e6;
+            color: #333;
+            padding: 40px 40px 20px 40px;
+            text-align: center;
+            border-bottom: 1px solid #f0e8d8;  /* Very subtle border */
+        }
+        
+        .header h1 {
             font-size: 48px;
             margin-bottom: 20px;
+            color: #333;
+            font-weight: normal;
+            font-family: 'Helvetica', 'Helvetica Neue', 'Arial', sans-serif;
         }
         
-        p {
-            color: #666;
+        .header p {
             font-size: 18px;
             line-height: 1.6;
-            margin-bottom: 30px;
+            max-width: 600px;
+            margin: 0 auto;
+            color: #666;
+            font-family: 'Helvetica', 'Helvetica Neue', 'Arial', sans-serif;
         }
         
+        /* Boxes Container */
+        .boxes-container {
+            padding: 40px;
+        }
+        
+        /* Individual Box - flat design */
+        .box {
+            background: #ffffff;  /* Pure white for boxes */
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            cursor: pointer;
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            border: 1px solid #f5efe0;  /* Very light border */
+            transition: background 0.2s ease;
+            font-family: 'Helvetica', 'Helvetica Neue', 'Arial', sans-serif;
+        }
+        
+        .box:hover {
+            background: #fffdf7;  /* Slightly warmer on hover */
+            border-color: #e8e0d0;
+        }
+        
+        /* Box Image */
+        .box-image {
+            flex-shrink: 0;
+            width: 200px;
+            height: 200px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #f0e8dc;
+            background: #fef9ef;
+        }
+        
+        .box-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* Box Content */
+        .box-content {
+            flex: 1;
+        }
+        
+        .box-content h3 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: normal;
+            font-family: 'Helvetica', 'Helvetica Neue', 'Arial', sans-serif;
+        }
+        
+        .box-content p {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            font-family: 'Helvetica', 'Helvetica Neue', 'Arial', sans-serif;
+        }
+        
+        .click-hint {
+            display: inline-block;
+            color: #9b8e7a;
+            font-size: 14px;
+            margin-top: 10px;
+            font-family: 'Helvetica', 'Helvetica Neue', 'Arial', sans-serif;
+        }
+        
+        /* Back Button - flat design */
         .back-button {
             display: inline-block;
+            margin: 20px 40px 40px 40px;
             padding: 12px 24px;
-            background: #667eea;
-            color: white;
+            background: #f5efe5;
+            color: #333;
             text-decoration: none;
-            border-radius: 25px;
-            transition: transform 0.3s ease;
+            border-radius: 6px;
+            transition: background 0.2s ease;
+            border: 1px solid #e8e0d4;
+            font-family: 'Helvetica', 'Helvetica Neue', 'Arial', sans-serif;
         }
         
         .back-button:hover {
-            transform: scale(1.05);
-            background: #5a67d8;
+            background: #ede5d8;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 32px;
+            }
+            
+            .header p {
+                font-size: 16px;
+            }
+            
+            .box {
+                flex-direction: column;
+                text-align: center;
+                padding: 20px;
+            }
+            
+            .box-image {
+                width: 150px;
+                height: 150px;
+                margin: 0 auto;
+            }
+            
+            .boxes-container {
+                padding: 20px;
+            }
+            
+            .back-button {
+                margin: 20px;
+            }
+        }
+        
+        .clickable {
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Page A</h1>
-        <p>Welcome to Page A! This is the destination for the left image.</p>
-        <p>You can customize this page with your own content.</p>
+        <!-- Header with Title and Paragraph -->
+        <div class="header">
+            <h1>Projects Libres</h1>
+            <p>Projets qui utilisent des outils mathématiques, des algorithmes et des moyens informatiques. Les sujets abordés sont l'audio, le traitement d'images, l'économie, les simulations et autres.</p>
+        </div>
+        
+        <!-- Three Boxes -->
+        <div class="boxes-container">
+            <!-- Box 1 - TG77 AFM OSC -->
+            <div class="box clickable" data-url="tg77-patch-generator.html">
+                <div class="box-image">
+                    <img src="afm_osc_tg77.png" alt="TG77 AFM OSC">
+                </div>
+                <div class="box-content">
+                    <h3>Yamaha TG77 patch générateur</h3>
+                    <p>L'exploration de l'architecture audio du Yamaha TG77 et le processus de création d'un générateur de patches en utilisant un fragment audio initial.</p>
+                    <!-- span class="click-hint">Aller →</span> -->
+                </div>
+            </div>
+            
+            <!-- Box 2 - SOM -->
+            <div class="box clickable" data-url="som.html">
+                <div class="box-image">
+                    <img src="som_wiki.png" alt="SOM">
+                </div>
+                <div class="box-content">
+                    <h3>SOM algorithme et découvertes</h3>
+                    <p>Etude du SOM algorithme et applications.</p>
+                    <!-- span class="click-hint">Aller →</span> -->
+                </div>
+            </div>
+            
+            <!-- Box 3 - Mini jeu -->
+            <div class="box clickable" data-url="mini-jeu.html">
+                <div class="box-image">
+                    <img src="mini_jeu.png">
+                </div>
+                <div class="box-content">
+                    <h3>Mini Jeu</h3>
+                    <p>Jeu en base à la théorie des jeux.</p>
+                    <!-- span class="click-hint">Aller →</span> -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Back Button -->
         <a href="index.html" class="back-button">← Back to Animation</a>
     </div>
+    
+    <script>
+        // Make all boxes clickable
+        const boxes = document.querySelectorAll('.box');
+        
+        boxes.forEach(box => {
+            box.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') return;
+                
+                const url = this.getAttribute('data-url');
+                if (url) {
+                    window.location.href = url;
+                }
+            });
+        });
+        
+        console.log('Page A loaded - Whiter bone-white design');
+    </script>
 </body>
 </html>
