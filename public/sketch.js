@@ -104,13 +104,7 @@ function draw() {
   for (let cube of cubes) {
     push();
     translate(cube.x, cube.y, 0);
-    
-    // Update rotation
-    cube.rotX += cube.rotSpeed;
-    cube.rotY += cube.rotSpeed * 0.3;
-    rotateX(cube.rotX); // for rotating the cubes in it's same axis
-    rotateY(cube.rotY);
-    
+   
     // Set color based on position
     if (cube.type === 'inside') {
       // Orange for inside the figure
