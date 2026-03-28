@@ -1,8 +1,10 @@
+// working local code of version: 20260320 - 2 (web version maintenant)
 let img;
 let cubes = [];
 let cubeSize = 45; // Size of each cube
 let threshold = 30; // Threshold for detecting black pixels
 let zoomLevel = 1;
+let distance = 800; // Camera distance
 
 async function setup() {
   // Red background while asset loads (little square at the top left corner)
@@ -13,8 +15,11 @@ async function setup() {
 
   // Create canvas with WEBGL mode
   //createCanvas(img.width, img.height, WEBGL);
-  createCanvas(windowWidth, windowHeight, WEBGL); // this line makes that the canvas adapts to the windows size
-
+  // Get the container div
+  const canvasContainer = document.getElementById('canvas-container');
+  let canvas = createCanvas(windowWidth, windowHeight, WEBGL);
+  canvas.parent('canvas-container');
+  
   // Use CORNER mode.
   imageMode(CENTER);
   
@@ -77,26 +82,19 @@ function draw() {
   // Set background
   background(255);
 
+  // Set camera
+  camera(0, 0, distance, 0, 0, 0, 0, 1, 0);
+  perspective(60 * PI / 180, width / height, 0.1, 2000);
+  
   // Set up lighting (directly in draw instead of separate function)
   ambientLight(100);
   directionalLight(255, 255, 255, 0, 0, -1);
   pointLight(255, 255, 255, 0, 0, 200);
 
-  // Calculate scale based on window size
-  let figureWidth = img.width;
-  let figureHeight = img.height;
-  
-  // Calculate zoom to fit in window
-  let zoomX = width / figureWidth;
-  let zoomY = height / figureHeight;
-  zoomLevel = min(zoomX, zoomY) * 0.8; // 80% of available space
-
-  // Apply zoom transformation
-  scale(zoomLevel);
-  
   // Center the cubes
+  push();
   //translate(width/2 - img.width/2.5, height/2 - img.height/1.9, -150);
-  translate(0, 0, -300);
+  translate(25, 0, 0);
 
   // Rotate slowly for better visibility of the whole plane
   rotateY(PI/50)//animated rotation: rotateY(frameCount * 0.01);
@@ -118,10 +116,18 @@ function draw() {
       // Orange for inside the figure
       fill(255, 165, 0);
       stroke(255, 140, 0);
+      cube.rotX += cube.rotSpeed * 0.1;
+      cube.rotY += cube.rotSpeed * 0.1;
+      rotateX(cube.rotX);
+      rotateY(cube.rotY);
     } else {
       // Blue for outside
       fill(0, 100, 255);
       stroke(0, 70, 200);
+      cube.rotX += cube.rotSpeed * 0.3;
+      cube.rotY += cube.rotSpeed * 0.3;
+      rotateX(cube.rotX);
+      rotateY(cube.rotY);
     }
     
     strokeWeight(1);
