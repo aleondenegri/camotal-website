@@ -82,6 +82,21 @@ function draw() {
   // Set background
   background(255);
 
+  // Calculate scale based on window size
+  let figureWidth = img.width;
+  let figureHeight = img.height;
+  
+  // Calculate zoom to fit in window
+  let zoomX = width / figureWidth;
+  let zoomY = height / figureHeight;
+  zoomLevel = min(zoomX, zoomY) * 0.8; // 80% of available space
+
+  // Save current state
+  push();
+
+  // Apply zoom transformation
+  scale(zoomLevel);
+    
   // Set camera
   camera(0, 0, distance, 0, 0, 0, 0, 1, 0);
   perspective(60 * PI / 180, width / height, 0.1, 2000);
@@ -118,8 +133,8 @@ function draw() {
       // Blue for outside
       fill(0, 100, 255);
       stroke(0, 70, 200);
-      cube.rotX += cube.rotSpeed * 0.3;
-      cube.rotY += cube.rotSpeed * 0.3;
+      cube.rotX += cube.rotSpeed * 0.4;
+      cube.rotY += cube.rotSpeed * 0.4;
       rotateX(cube.rotX);
       rotateY(cube.rotY);
     }
