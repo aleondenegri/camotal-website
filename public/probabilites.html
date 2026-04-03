@@ -109,19 +109,38 @@
         4. Text inside formulas: Use \text{your text} for normal text within math mode
         -->
 
-        <h1>Probability Functions & Conditional Probability</h1>
+        <h1>Fonction de probabilité et probabilité conditionnel</h1>
         
-        <p>This page explains the fundamental concepts of probability theory, including probability functions, conditional probability, and Bayes' theorem.</p>
+        <p>Cette page s'agit d'expliquer les concepts fundamentaux de la théorie de la probabilité, inclus la fonction de probabilité, probabilité conditionnel et théorème du Bayes.</p>
         
         <h2>Probabilite conditionnel</h2>
         
         $$ P(A|B) = \frac{P(A \cap B)}{P(B)} $$
 
-        <p>Significance: Probabilite qui l'événement \(Y\) se produise etant donné l'événement \(X\) s'est produit (ou est fixé).</p>
+        <ul>
+            <li><strong>Significance:</strong> Probabilite qui l'événement \(Y\) se produise etant donné l'événement \(X\) s'est produit (ou est fixé).</li>
+            <li><strong>Définition formel:</strong> \(P(Y \mid X) = \frac{P(Y \cap X)}{P(X)}\), etant donné \(P(X) > 0\).</li>
+            <li><strong>Contexte:</strong> \(Y\) et \(X\) sont événement aléatoires ou variables aléatoires.</li>
+            <li><strong>Exemple:</strong> \(P(\text{Pluie} \mid \text{Nuageux}) = 0.8\)</li>
+        </ul>
         
+        <h2>Probabilité avec parametres</h2>
+
+        $$ P(Y; X) $$ 
+        <ul>
+            <li><strong>Significance:</strong> Distributoin de probabilité de \(Y\) indexé par le paramètre \(X\) (qui n'est pas traitée comme une variable aléatoire). Le point-virgule sépare la variable aléatoire des paramètres fixés.</li>
+            <li><strong>Non une probabilité conditionnel:</strong> \(X\) est une quantité déterministe (paramètre), non une événement.</li>
+            <li><strong>Contexte:</strong> Statistique fréquentiste, fonctions de vraisemblance.</li>
+            <li><strong>Exemple:</strong> \(P(Y; \theta) = \theta^y (1-\theta)^{1-y}\) — ici \(\theta\) est une paramètre fixé, non une variable aléatoire.</li>
+        </ul>
+
+
         
-        
-        <h2>....</h2>
+
+
+
+
+
         
         
         <a href="page-a.html" class="back-button">← Aller à projets</a>
