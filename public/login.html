@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login – Protected Area</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Helvetica', Arial, sans-serif;
+            background: #fef9e6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            border: 1px solid #f0e8dc;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #333;
+            font-weight: 500;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #e0d8c8;
+            border-radius: 6px;
+            font-size: 16px;
+            background: #fefcf7;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #f5efe5;
+            border: 1px solid #e8e0d4;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #ede5d8;
+        }
+        .error {
+            color: #c44;
+            margin-top: 10px;
+            font-size: 14px;
+            text-align: center;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #9b8e7a;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .loading {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>🔐 Access Required</h1>
+        <form id="loginForm">
+            <label>Email</label>
+            <input type="email" id="email" placeholder="Enter your email" autocomplete="off">
+            
+            <label>Password</label>
+            <input type="password" id="password" placeholder="Enter your password">
+            
+            <button type="submit">Login</button>
+            <div id="errorMsg" class="error"></div>
+            <div id="loadingMsg" class="loading" style="display: none;">Authenticating...</div>
+        </form>
+        <a href="page-b.html" class="back-link">← Back to Page B</a>
+    </div>
+
+    <!-- Firebase SDKs - ADDED HERE -->
+    <!-- Firebase App (core) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <!-- Firebase Auth -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    
+    <script>
+        // ============================================
+        // FIREBASE CONFIGURATION - REPLACE WITH YOUR OWN!
+        // ============================================
+        // Go to Firebase Console > Project Settings > General
+        // Find your web app configuration and copy it here
+        const firebaseConfig = {
+            apiKey: "AIzaSyB996ZAlh-daw8DZUbB4Azlw811aUScJ1g",
+            authDomain: "camotal.com",  // ← YOUR DOMAIN, NOT firebaseapp.com
+            projectId: "camota-first-try-firebase",
+            storageBucket: "camota-first-try-firebase.firebasestorage.app",
+            messagingSenderId: "976056682100",
+            appId: "1:976056682100:web:e4d05a6e0ec8108ddab321"
+        };
+                
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        
+        // ============================================
+        // LOGIN FORM HANDLER
+        // ============================================
+        const loginForm = document.getElementById('loginForm');
+        const errorDiv = document.getElementById('errorMsg');
+        const loadingDiv = document.getElementById('loadingMsg');
+        const submitButton = loginForm.querySelector('button');
+        
+        loginForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Clear previous error
+            errorDiv.textContent = '';
+            
+            // Basic validation
+            if (!email || !password) {
+                errorDiv.textContent = '❌ Please enter both email and password.';
+                return;
+            }
+            
+            // Show loading state
+            loadingDiv.style.display = 'block';
+            submitButton.disabled = true;
+            submitButton.textContent = 'Logging in...';
+            
+            try {
+                // Attempt to sign in with Firebase
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                
+                console.log('✅ Login successful! User:', user.email);
+                
+                // Set session flag (optional, for additional checks)
+                sessionStorage.setItem('authenticated', 'true');
+                sessionStorage.setItem('userEmail', user.email);
+                
+                // Redirect to protected page
+                window.location.href = 'protected-page.html';
+                
+            } catch (error) {
+                // Handle specific Firebase auth errors
+                console.error('❌ Login error:', error.code, error.message);
+                
+                switch (error.code) {
+                    case 'auth/invalid-email':
+                        errorDiv.textContent = '❌ Invalid email format.';
+                        break;
+                    case 'auth/user-disabled':
+                        errorDiv.textContent = '❌ This account has been disabled.';
+                        break;
+                    case 'auth/user-not-found':
+                        errorDiv.textContent = '❌ No account found with this email.';
+                        break;
+                    case 'auth/wrong-password':
+                        errorDiv.textContent = '❌ Incorrect password.';
+                        break;
+                    default:
+                        errorDiv.textContent = '❌ Login failed: ' + error.message;
+                }
+            } finally {
+                // Hide loading state
+                loadingDiv.style.display = 'none';
+                submitButton.disabled = false;
+                submitButton.textContent = 'Login';
+            }
+        });
+        
+        // Check if user is already logged in
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                console.log('User already logged in:', user.email);
+                // Optionally redirect immediately
+                // window.location.href = 'protected-page.html';
+            }
+        });
+    </script>
+</body>
+</html>

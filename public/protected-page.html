@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protected Content</title>
+    <style>
+        body {
+            font-family: 'Helvetica', Arial, sans-serif;
+            background: #fef9e6;
+            padding: 40px;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border: 1px solid #f0e8dc;
+            border-radius: 12px;
+        }
+        h1 {
+            color: #333;
+        }
+        .logout {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 10px 20px;
+            background: #f5efe5;
+            border: 1px solid #e8e0d4;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #333;
+        }
+        .user-info {
+            background: #fef9e6;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+    </style>
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>🔒 Secret Page</h1>
+        <p>You have successfully logged in! This is your protected content.</p>
+        <div id="userInfo" class="user-info"></div>
+        <button id="logoutBtn" class="logout">🚪 Logout</button>
+    </div>
+
+    <script>
+        // Firebase configuration (same as login.html)
+        const firebaseConfig = {
+            apiKey: "AIzaSyB996ZAlh-daw8DZUbB4Azlw811aUScJ1g",
+            authDomain: "camotal.com",  // ← YOUR DOMAIN, NOT firebaseapp.com
+            projectId: "camota-first-try-firebase",
+            storageBucket: "camota-first-try-firebase.firebasestorage.app",
+            messagingSenderId: "976056682100",
+            appId: "1:976056682100:web:e4d05a6e0ec8108ddab321"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        
+        // Check authentication state
+        auth.onAuthStateChanged((user) => {
+            if (!user) {
+                // Not logged in - redirect to login
+                window.location.href = 'login.html';
+            } else {
+                // Display user info
+                document.getElementById('userInfo').innerHTML = `
+                    ✅ Logged in as: <strong>${user.email}</strong><br>
+                    User ID: ${user.uid}
+                `;
+                console.log('Protected page accessed by:', user.email);
+            }
+        });
+        
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            try {
+                await auth.signOut();
+                sessionStorage.removeItem('authenticated');
+                window.location.href = 'login.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        });
+    </script>
+</body>
+</html>
